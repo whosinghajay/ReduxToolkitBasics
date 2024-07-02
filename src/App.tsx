@@ -1,10 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { useAppDispatch, useAppSelector } from "./redux/hooks/hooks";
+import { RootState } from "./redux/store";
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+} from "./redux/slices/counter/counterSlice";
+import MyComp from "./component/MyComp";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const count = useAppSelector((state: RootState) => state.counter.value);
+
+  const dispatch = useAppDispatch();
+
+  const incrementHandler = () => {
+    dispatch(increment());
+  };
+
+  const decrementHandler = () => {
+    dispatch(decrement());
+  };
+
+  const incrementByValue = (value: number) => {
+    dispatch(incrementByAmount(value));
+  };
 
   return (
     <>
@@ -16,20 +37,16 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <h1>Count is {count}</h1>
+      <button onClick={incrementHandler}>Increment</button>
+      <button onClick={decrementHandler}>Decrement</button>
+      <button onClick={() => incrementByValue(5)}>IncrementBy5</button>
+
+      <div style={{ marginTop: 100, backgroundColor: "black", color: "white", padding:20, borderRadius:20 }}>
+        <MyComp />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
